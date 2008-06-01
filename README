@@ -18,7 +18,7 @@ II.  How does a Negative Captcha Work?
     
 III.  How does the Negative Captcha Plugin Work?
   1) Install the plugin:
-    script/plugin install http://github.com/subwindow/negative-captcha/tree/master
+    script/plugin install http://code.subwindow.com/negative_captcha
   2) Add in the controller hooks
     #At top:
     before_filter :setup_negative_captcha, :only => [:new, :create]
