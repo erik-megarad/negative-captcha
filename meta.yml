@@ -1,0 +1,7 @@
+author: subwindow
+summary: Plugin to assist in the creation of negative captchas
+homepage: http://github.com/subwindow/negative-captcha
+plugin: http://code.subwindow.com/negative_captcha
+license: MIT
+version: 0.1
+rails_version: 2.0+
