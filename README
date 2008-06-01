@@ -7,8 +7,11 @@ I.  What is a Negative Captcha?
 II.  How does a Negative Captcha Work?
   In a negative captcha form there are two main parts and three ancillary parts.  I'll explain them thusly.
   Main Part #1: Honeypots.
-    Honeypots are form fields which look exactly like real form fields.  Bots will see them and fill them out.  Humans cannot see them and thusly will not fill them out.  They are hidden indirectly- usually by positioning them off to the left of the browser.
+    Honeypots are form fields which look exactly like real form fields.  Bots will see them and fill them out.  Humans cannot see them and thusly will not fill them out.  They are hidden indirectly- usually by positioning them off to the left of the browser. They look kind of like this:
+      <div style="position: absolute; left: -2000px;"><input type="text" name="name"  value="" /></div>
   Main Part #2: Real fields.
+    These fields are the ones humans will see, will subsequently fill out, and that you'll pull your real form data out of.  The form name will be hashed so that bots will not know what it is.  They look kind of like this:
+      <input type="text" name="685966bd3a1975667b4777cc56188c7e" />
   Ancillary Part #1: Timestamp
     This is a field that is used in the hash key to make the hash different on every GET request, and to prevent replayability.
   Ancillary Part #2: Spinner
@@ -35,7 +38,7 @@ III.  How does the Negative Captcha Plugin Work?
   3) Modify your POST action(s) to check for the validity of the negative captcha form
     def create
       if @captcha.valid?
-        @comment = Comment.create(params[:comment])
+        @comment = Comment.create(@captcha.values) #Decrypted params
       end
       
       if @captcha.valid? && @comment.valid?
