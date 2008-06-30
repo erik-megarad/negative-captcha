@@ -1,3 +1,5 @@
+require 'md5'
+
 class NegativeCaptcha
   attr_accessor :fields
   attr_accessor :values

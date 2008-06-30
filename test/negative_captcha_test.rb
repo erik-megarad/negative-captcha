@@ -1,4 +1,7 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '../../../../test/test_helper')) 
+require 'rubygems'
+require 'activesupport'
+require 'test/unit'
+require File.expand_path(File.join(File.dirname(__FILE__), '../lib/negative_captcha'))
 
 class NegativeCaptchaTest < Test::Unit::TestCase
   def test_valid_submission
