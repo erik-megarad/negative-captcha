@@ -1,0 +1,151 @@
+h1. Negative Captcha Plugin
+
+h2. What is a Negative Captcha?
+
+A negative captcha has the exact same purpose as your run-of-the-mill image captcha: To keep bots from submitting forms.  Image ("positive") captchas do this by implementing a step which only humans can do, but bots cannot: read jumbled characters from an image.  But this is bad.  It creates usability problems, it hurts conversion rates, and it confuses the shit out of lots of people.  Why not do it the other way around? Negative captchas create a form that has tasks that only bots can perform, but humans cannot.  This has the exact same effect, with (anecdotally) a much lower false positive identification rate when compared with positive captchas.  All of this comes without making humans go through any extra trouble to submit the form.  It really is win-win.
+  
+h2.  How does a Negative Captcha Work?
+  
+In a negative captcha form there are two main parts and three ancillary parts.  I'll explain them thusly.
+
+h3. Honeypots
+
+Honeypots are form fields which look exactly like real form fields.  Bots will see them and fill them out.  Humans cannot see them and thusly will not fill them out.  They are hidden indirectly- usually by positioning them off to the left of the browser. They look kind of like this:
+
+<pre>
+  <code>
+    <div style="position: absolute; left: -2000px;"><input type="text" name="name"  value="" /></div>
+  </code>
+</pre>
+  
+h3. Real fields
+
+These fields are the ones humans will see, will subsequently fill out, and that you'll pull your real form data out of.  The form name will be hashed so that bots will not know what it is.  They look kind of like this:
+
+<pre>
+  <code>
+    <input type="text" name="685966bd3a1975667b4777cc56188c7e" />
+  </code>
+</pre>
+
+h4. Timestamp
+
+This is a field that is used in the hash key to make the hash different on every GET request, and to prevent replayability.
+
+h4. Spinner
+
+This is a rotating key that is used in the hash method to prevent replayability.  I'm not sold on its usefulness.
+
+h4. Secret key
+
+This is simply some key that is used in the hashing method to prevent bots from backing out the name of the field from the hashed field name.
+    
+h2. How does the Negative Captcha Plugin Work?
+  
+h3. Install the plugin
+
+h4. Subversion Installation
+
+<pre>
+  <code>
+    script/plugin install http://code.subwindow.com/negative_captcha
+  </code>
+</pre>
+  
+h4. Git Installation
+
+<pre>
+  <code>
+    git submodule add git://github.com/subwindow/negative-captcha.git vendor/plugins/negative_captcha
+  </code>
+</pre>
+
+h3. Controller Hooks
+    
+Place this before filter at the top of the controller you are protecting:
+
+<pre>
+  <code>
+    before_filter :setup_negative_captcha, :only => [:new, :create]
+  </code>
+</pre>  
+
+In the same controller include the following private method:
+
+<pre>
+  <code>
+    private
+      def setup_negative_captcha
+        @captcha = NegativeCaptcha.new(
+          :secret => ::NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb.  'rake secret' will give you a good one.
+          :spinner => request.remote_ip, 
+          :fields => [:name, email, body], #Whatever fields are in your form 
+          :params => params)
+      end
+  </code>
+</pre>
+
+Modify your POST action(s) to check for the validity of the negative captcha form
+
+<pre>
+  <code>
+    def create
+      if @captcha.valid?
+        @comment = Comment.create(@captcha.values) #Decrypted params
+      end
+      
+      if @captcha.valid? && @comment.valid?
+        redirect_to @comment
+      else
+        flash[:notice] = @captcha.error
+        render :action => 'new'
+      end
+    end
+  </code>
+</pre>
+
+h3. Form Example
+
+Modify your form to include the honeypots and other fields.  You can probably leave any select, radio, and check box fields alone.  The text field/text area helpers should be sufficient.
+
+<pre>
+  <code>
+    <% form_tag comments_path do -%>
+      <%= negative_captcha(@captcha) %>
+        <ul class="contact_us">
+          <li>
+            <label>Name:</label>
+            <%= negative_text_field_tag @captcha, :name %>
+          </li>
+          <li>
+            <label>Email:</label>
+            <%= negative_text_field_tag @captcha, :email %>
+          </li>
+          <li>
+            <label>Your Comment:</label>
+            <%= negative_text_area_tag @captcha, :body %>
+          </li>
+          <li>
+            <%= submit_tag %>
+          </li>
+        </ul>
+      <% end -%>
+  </code>
+</pre>
+
+h3. Test and enjoy!
+  
+h2. Possible Gotchas and other concerns
+
+* It is still possible for someone to write a bot to exploit a single site by closely examining the DOM.  This means that if you are Yahoo, Google or Facebook, negative captchas will not be a complete solution.  But if you have a small application, negative captchas will likely be a very, very good solution for you.  There are no easy work-arounds to this quite yet.  Let me know if you have one.
+* I'm not a genius.  It is possible that a bot can figure out the hashed values and determine which forms are which.  I don't know how, but I think they might be able to.  I welcome people who have thought this out more thoroughly to criticize this method and help me find solutions.  I like this idea a lot and want it to succeed.
+
+h2. Credit
+
+The idea of a negative captcha is not mine.  It originates (I think) from Damien Katz of CouchDB. I (Erik Peterson) wrote the plugin.  Calvin Yu wrote the original class which I refactored quite a bit and made into the plugin.
+
+We did this while working on "Skribit":http://skribit.com/, an Atlanta startup (if you have a blog, please check us out at "http://skribit.com/":http://skribit.com/)
+
+If you have any questions, concerns or have found any bugs, please email me at erik@skribit.com
+
+If you'd like to help improve or refactor this plugin, please create a fork on Github and let me know about it.  "http://github.com/subwindow/negative-captcha":http://github.com/subwindow/negative-captcha
