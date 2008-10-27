@@ -77,9 +77,9 @@ In the same controller include the following private method:
     private
       def setup_negative_captcha
         @captcha = NegativeCaptcha.new(
-          :secret => ::NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb.  'rake secret' will give you a good one.
+          :secret => NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb.  'rake secret' will give you a good one.
           :spinner => request.remote_ip, 
-          :fields => [:name, email, body], #Whatever fields are in your form 
+          :fields => [:name, :email, :body], #Whatever fields are in your form 
           :params => params)
       end
   </code>
@@ -90,14 +90,11 @@ Modify your POST action(s) to check for the validity of the negative captcha for
 <pre>
   <code>
     def create
-      if @captcha.valid?
-        @comment = Comment.create(@captcha.values) #Decrypted params
-      end
-      
-      if @captcha.valid? && @comment.valid?
+      @comment = Comment.new(@captcha.values) #Decrypted params
+      if @captcha.valid? && @comment.save
         redirect_to @comment
       else
-        flash[:notice] = @captcha.error
+        flash[:notice] = @captcha.error if @captcha.error 
         render :action => 'new'
       end
     end
