@@ -8,16 +8,21 @@ module NegativeCaptchaViewHelpers
   
   def negative_text_field_tag(negative_captcha, field, options={})
     [
-      text_field_tag(negative_captcha.fields[field], negative_captcha.values[field], options.merge(:tabindex => '1')),
-      "<div style='position: absolute; left: -2000px;'>" + text_field_tag(field, '', :tabindex => '999', :autocomplete => 'off') + "</div>"
+      text_field_tag(negative_captcha.fields[field], negative_captcha.values[field], options),
+      "<div style='position: absolute; left: -2000px;'>" + text_field_tag(field, '', :tabindex => '999') + "</div>"
     ].join
   end
   
   def negative_text_area_tag(negative_captcha, field, options={})
     [
-      text_area_tag(negative_captcha.fields[field], negative_captcha.values[field] || options[:value], options.merge(:tabindex => '1')),
-      "<div style='position: absolute; left: -2000px;'>" + text_area_tag(field, '', :tabindex => '999', :autocomplete => 'off') + "</div>"
+      text_area_tag(negative_captcha.fields[field], negative_captcha.values[field] || options[:value], options),
+      "<div style='position: absolute; left: -2000px;'>" + text_area_tag(field, '', :tabindex => '999', :rows => 2, :cols => 1) + "</div>"
     ].join
+  end
+  def negative_label_tag(negative_captcha, field, name, options={})
+    [
+      label_tag(negative_captcha.fields[field], name, options)
+    ]
   end
   
   #TODO: Select, check_box, etc
