@@ -35,9 +35,7 @@ module NegativeCaptchaViewHelpers
   end
   
   def negative_label_tag(negative_captcha, field, name, options={})
-    [
-      label_tag(negative_captcha.fields[field], name, options)
-    ]
+    label_tag(negative_captcha.fields[field], name, options)
   end
   
   #TODO: Select, check_box, etc

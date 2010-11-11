@@ -136,7 +136,6 @@ h2. Possible Gotchas and other concerns
 
 * It is still possible for someone to write a bot to exploit a single site by closely examining the DOM.  This means that if you are Yahoo, Google or Facebook, negative captchas will not be a complete solution.  But if you have a small application, negative captchas will likely be a very, very good solution for you.  There are no easy work-arounds to this quite yet.  Let me know if you have one.
 * I'm not a genius.  It is possible that a bot can figure out the hashed values and determine which forms are which.  I don't know how, but I think they might be able to.  I welcome people who have thought this out more thoroughly to criticize this method and help me find solutions.  I like this idea a lot and want it to succeed.
-* Form validators will not highlight errorFields.
 
 h2. Credit
 
