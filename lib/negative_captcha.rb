@@ -1,4 +1,10 @@
-require 'md5'
+if RUBY_VERSION.to_f >= 1.9
+  RUBY_19 = true
+  require 'digest/md5'
+else
+  RUBY_19 = false
+  require 'md5'
+end
 
 class NegativeCaptcha
   attr_accessor :fields
@@ -10,11 +16,21 @@ class NegativeCaptcha
   attr_accessor :error
 
   def initialize(opts)
-    @secret = opts[:secret]||MD5.hexdigest("this_is_a_secret_key")
+    @secret = opts[:secret]||(RUBY_19 ? Digest::MD5.hexdigest("this_is_a_secret_key") : MD5.hexdigest("this_is_a_secret_key"))
     @timestamp =  (opts.has_key?(:params) ? opts[:params][:timestamp] : nil) || Time.now()
-    @spinner = MD5.hexdigest(([@timestamp, @secret] + (opts[:spinner].is_a?(Array) ? opts[:spinner] : [opts[:spinner]]))*'-')
+    spinner_text = ([@timestamp, @secret] + (opts[:spinner].is_a?(Array) ? opts[:spinner] : [opts[:spinner]]))*'-'
+    @spinner = RUBY_19 ? Digest::MD5.hexdigest(spinner_text) : MD5.hexdigest(spinner_text)
     @message = opts[:message]||"Please try again. This usually happens because an automated script attempted to submit this form."
-    @fields = opts[:fields].inject({}){|hash, field_name| hash[field_name] = MD5.hexdigest([field_name, @spinner, @secret]*'-'); hash }
+    @fields = opts[:fields].inject({}){ |hash, field_name|
+      hash[field_name] = \
+      if RUBY_19
+        Digest::MD5.hexdigest([field_name, @spinner, @secret]*'-')
+      else
+        MD5.hexdigest([field_name, @spinner, @secret]*'-')
+      end
+
+      hash
+    }
     @values = {}
     @error = "No params provided"
     process(opts[:params]) if opts[:params] && (opts[:params][:spinner]||opts[:params][:timestamp])
@@ -25,11 +41,11 @@ class NegativeCaptcha
   end
 
   def valid?
-    @error.blank?
+    @error.nil? || @error == "" || @error.empty?
   end
 
   def process(params)
-    if params[:timestamp].nil? || (Time.now.to_i - params[:timestamp].to_i).abs > 1.day.to_i
+    if params[:timestamp].nil? || (Time.now.to_i - params[:timestamp].to_i).abs > 86400
       @error = "Error: Invalid timestamp.  #{@message}"
     elsif params[:spinner] != @spinner
       @error = "Error: Invalid spinner.  #{@message}"
