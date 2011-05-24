@@ -17,7 +17,7 @@ class NegativeCaptcha
 
   def initialize(opts)
     @secret = opts[:secret]||(RUBY_19 ? Digest::MD5.hexdigest("this_is_a_secret_key") : MD5.hexdigest("this_is_a_secret_key"))
-    @timestamp =  (opts.has_key?(:params) ? opts[:params][:timestamp] : nil) || Time.now()
+    @timestamp =  (opts.has_key?(:params) ? opts[:params][:timestamp] : nil) || Time.now.to_i
     spinner_text = ([@timestamp, @secret] + (opts[:spinner].is_a?(Array) ? opts[:spinner] : [opts[:spinner]]))*'-'
     @spinner = RUBY_19 ? Digest::MD5.hexdigest(spinner_text) : MD5.hexdigest(spinner_text)
     @message = opts[:message]||"Please try again. This usually happens because an automated script attempted to submit this form."

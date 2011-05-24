@@ -1,7 +1,7 @@
 module NegativeCaptchaViewHelpers
   def negative_captcha(captcha)
     [
-      hidden_field_tag('timestamp', captcha.timestamp.to_i), 
+      hidden_field_tag('timestamp', captcha.timestamp), 
       hidden_field_tag('spinner', captcha.spinner),
     ].join
   end
