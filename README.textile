@@ -108,7 +108,7 @@ Modify your form to include the honeypots and other fields.  You can probably le
 <pre>
   <code>
     <% form_tag comments_path do -%>
-      <%= negative_captcha(@captcha) %>
+      <%= raw negative_captcha(@captcha) %>
         <ul class="contact_us">
           <li>
 			<%= negative_label_tag(@captcha, :name, 'Name:') %>
