@@ -1,8 +1,7 @@
-require 'rubygems'
-require 'active_support'
-require 'action_view'
-require 'test/unit'
-require File.expand_path(File.join(File.dirname(__FILE__), '../lib/negative-captcha'))
+require "rails"
+require "active_record"
+require "rails/test_help"
+require_relative '../lib/negative_captcha'
 
 class NegativeCaptchaTest < Test::Unit::TestCase
   def test_valid_submission
