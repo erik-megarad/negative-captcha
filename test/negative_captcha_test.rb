@@ -1,9 +1,12 @@
-require "rails"
-require "active_record"
-require "rails/test_help"
+require "action_view"
+require 'test/unit'
 require_relative '../lib/negative_captcha'
 
 class NegativeCaptchaTest < Test::Unit::TestCase
+  def test_view_helpers
+    assert ActionView::Base.respond_to?(:negative_captcha)
+  end
+
   def test_valid_submission
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)

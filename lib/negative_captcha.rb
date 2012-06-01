@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'action_view'
 
 class NegativeCaptcha
   attr_accessor :fields,
@@ -77,6 +78,6 @@ end
 
 
 require 'negative_captcha/view_helpers'
-ActiveRecord::Base.send :include, NegativeCaptchaViewHelpers
+ActionView::Base.send :include, NegativeCaptchaViewHelpers
 
 require "negative_captcha/form_builder"
