@@ -4,7 +4,7 @@ require_relative '../lib/negative_captcha'
 
 class NegativeCaptchaTest < Test::Unit::TestCase
   def test_view_helpers
-    assert ActionView::Base.respond_to?(:negative_captcha)
+    assert ActionView::Base.instance_methods.include?(:negative_captcha)
   end
 
   def test_valid_submission

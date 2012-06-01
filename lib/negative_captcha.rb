@@ -78,6 +78,8 @@ end
 
 
 require 'negative_captcha/view_helpers'
-ActionView::Base.send :include, NegativeCaptchaViewHelpers
-
 require "negative_captcha/form_builder"
+
+class ActionView::Base
+  include NegativeCaptchaHelpers
+end
