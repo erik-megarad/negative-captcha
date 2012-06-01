@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = s.description # Yeah, really. Fuck you.
   s.files        = [
     "LICENSE",
-    "README.textile",
+    "README.markdown",
     "Rakefile",
     "lib/negative_captcha.rb",
     "lib/negative_captcha/form_builder.rb",
