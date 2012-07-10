@@ -36,9 +36,9 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-          "<div style='position: absolute; left: -2000px;'>" +
-          hidden_field_tag(field, '', :tabindex => '999') +
-          "</div>".html_safe
+        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          hidden_field_tag(field, '', :tabindex => '999')
+        end.html_safe
       end
 
       def negative_password_field_tag(negative_captcha, field, options={})
@@ -47,9 +47,9 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-          "<div style='position: absolute; left: -2000px;'>" +
-          password_field_tag(field, '', :tabindex => '999') +
-          "</div>".html_safe
+        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          password_field_tag(field, '', :tabindex => '999')
+        end.html_safe
       end
 
       def negative_label_tag(negative_captcha, field, name, options={})
