@@ -80,7 +80,7 @@ simply add the following line in config/environments/test.rb
     
     NegativeCaptcha.test_mode = true
 
-This will insure that a field named email will not generate a hash but a field name test-email instead.
+This will ensure that a field named email will not generate a hash but a field name test-email instead.
 A tool like cucumber can now bypass this security while still going through the captcha workflow.
 
 ### Form Example
