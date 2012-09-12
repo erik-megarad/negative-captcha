@@ -73,6 +73,15 @@ Modify your POST action(s) to check for the validity of the negative captcha for
         render :action => 'new'
       end
     end
+### Automated tests
+
+To make all field ids and names predictable for tests,
+simply add the following line in config/environments/test.rb
+    
+    NegativeCaptcha.test_mode = true
+
+This will insure that a field named email will not generate a hash but a field name test-email instead.
+A tool like cucumber can now bypass this security while still going through the captcha workflow.
 
 ### Form Example
 
