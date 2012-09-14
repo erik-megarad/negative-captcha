@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "negative_captcha"
-  s.version     = "0.3"
+  s.version     = "0.3.0"
   s.authors     = ["Erik Peterson"]
   s.email       = ["erik@subwindow.com"]
   s.homepage    = "http://github.com/subwindow/negative-captcha"
