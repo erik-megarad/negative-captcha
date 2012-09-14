@@ -10,9 +10,9 @@ class NegativeCaptcha
     :timestamp,
     :error
 
-  TEST_MODE = false
+  @@test_mode = false
   def self.test_mode=(value)
-    const_set("TEST_MODE", value)
+    class_variable_set(:@@test_mode, value)
   end
 
   def initialize(opts)
@@ -35,7 +35,7 @@ This usually happens because an automated script attempted to submit this form.
     MESSAGE
 
     self.fields = opts[:fields].inject({}) do |hash, field_name|
-      hash[field_name] = TEST_MODE ? "test-#{field_name}" : Digest::MD5.hexdigest(
+      hash[field_name] = @@test_mode ? "test-#{field_name}" : Digest::MD5.hexdigest(
         [field_name, spinner, secret].join('-')
       )
 
