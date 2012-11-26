@@ -96,4 +96,17 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     assert !filled_form.valid?
     assert filled_form.error.match(/hidden/i).is_a?(MatchData)
   end
+
+  def test_valid_submission_with_only_whitespaces_in_fields
+    fields = [:one, :two, :three]
+    captcha = NegativeCaptcha.new(:fields => fields)
+
+    filled_form = NegativeCaptcha.new(
+      :fields => fields,
+      :timestamp => captcha.timestamp,
+      :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner, :one => ' ', :two => "\r\n", :three => "\n"}.merge(captcha.fields.inject({}){|hash, name, encrypted_name| hash[encrypted_name] = name; hash})
+    )
+    assert_equal "", filled_form.error
+    assert filled_form.valid?
+  end
 end
