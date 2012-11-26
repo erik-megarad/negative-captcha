@@ -65,7 +65,7 @@ This usually happens because an automated script attempted to submit this form.
       self.error = "Error: Invalid timestamp.  #{message}"
     elsif params[:spinner] != spinner
       self.error = "Error: Invalid spinner.  #{message}"
-    elsif fields.keys.detect {|name| params[name] && params[name].length > 0}
+    elsif fields.keys.detect {|name| params[name] && params[name] =~ /\S/}
       self.error = <<-ERROR
 Error: Hidden form fields were submitted that should not have been. #{message}
       ERROR
