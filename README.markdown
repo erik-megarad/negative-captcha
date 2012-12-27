@@ -12,13 +12,17 @@ In a negative captcha form there are two main parts and three ancillary parts. I
 
 Honeypots are form fields which look exactly like real form fields. Bots will see them and fill them out. Humans cannot see them and thusly will not fill them out. They are hidden indirectly- usually by positioning them off to the left of the browser. They look kind of like this:
 
-    <div style="position: absolute; left: -2000px;"><input type="text" name="name"  value="" /></div>
+```html
+<div style="position: absolute; left: -2000px;"><input type="text" name="name"  value="" /></div>
+```
 
 ### Real fields
 
 These fields are the ones humans will see, will subsequently fill out, and that you'll pull your real form data out of. The form name will be hashed so that bots will not know what it is. They look kind of like this:
 
-    <input type="text" name="685966bd3a1975667b4777cc56188c7e" />
+```html
+<input type="text" name="685966bd3a1975667b4777cc56188c7e" />
+```
 
 ### Timestamp
 
@@ -38,7 +42,9 @@ This is simply some key that is used in the hashing method to prevent bots from 
 
 You can let bundler install Negative Captcha by adding this line to your application’s Gemfile:
 
-    gem 'negative_captcha'
+```ruby
+gem 'negative_captcha'
+```
 
 And then execute:
 
@@ -48,37 +54,46 @@ And then execute:
 
 Place this before filter at the top of the controller you are protecting:
 
-    before_filter :setup_negative_captcha, :only => [:new, :create]
+```ruby
+before_filter :setup_negative_captcha, :only => [:new, :create]
+```
 
 In the same controller include the following private method:
 
-    private
-      def setup_negative_captcha
-        @captcha = NegativeCaptcha.new(
-          :secret => NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb. 'rake secret' will give you a good one.
-          :spinner => request.remote_ip, 
-          :fields => [:name, :email, :body], #Whatever fields are in your form 
-          :params => params
-        )
-      end
+```ruby
+private
+  def setup_negative_captcha
+    @captcha = NegativeCaptcha.new(
+      :secret => NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb. 'rake secret' will give you a good one.
+      :spinner => request.remote_ip, 
+      :fields => [:name, :email, :body], #Whatever fields are in your form 
+      :params => params
+    )
+  end
+```
 
 Modify your POST action(s) to check for the validity of the negative captcha form
 
-    def create
-      @comment = Comment.new(@captcha.values) #Decrypted params
-      if @captcha.valid? && @comment.save
-        redirect_to @comment
-      else
-        flash[:notice] = @captcha.error if @captcha.error 
-        render :action => 'new'
-      end
-    end
+```ruby
+def create
+  @comment = Comment.new(@captcha.values) #Decrypted params
+  if @captcha.valid? && @comment.save
+    redirect_to @comment
+  else
+    flash[:notice] = @captcha.error if @captcha.error 
+    render :action => 'new'
+  end
+end
+```
+
 ### Automated tests
 
 To make all field ids and names predictable for tests,
 simply add the following line in config/environments/test.rb
-    
-    NegativeCaptcha.test_mode = true
+
+```ruby
+NegativeCaptcha.test_mode = true
+```
 
 This will ensure that a field named email will not generate a hash but a field name test-email instead.
 A tool like cucumber can now bypass this security while still going through the captcha workflow.
@@ -87,26 +102,28 @@ A tool like cucumber can now bypass this security while still going through the 
 
 Modify your form to include the honeypots and other fields. You can probably leave any select, radio, and check box fields alone. The text field/text area helpers should be sufficient.
 
-    <% form_tag comments_path do -%>
-      <%= raw negative_captcha(@captcha) %>
-        <ul class="contact_us">
-          <li>
-            <%= negative_label_tag(@captcha, :name, 'Name:') %>
-            <%= negative_text_field_tag @captcha, :name %>
-          </li>
-          <li>
-            <%= negative_label_tag(@captcha, :email, 'Email:') %>
-            <%= negative_text_field_tag @captcha, :email %>
-          </li>
-          <li>
-            <%= negative_label_tag(@captcha, :body, 'Your Comment:') %>
-            <%= negative_text_area_tag @captcha, :body %>
-          </li>
-          <li>
-            <%= submit_tag %>
-          </li>
-        </ul>
-      <% end -%>
+```erb
+<% form_tag comments_path do -%>
+  <%= raw negative_captcha(@captcha) %>
+  <ul class="contact_us">
+    <li>
+      <%= negative_label_tag(@captcha, :name, 'Name:') %>
+      <%= negative_text_field_tag @captcha, :name %>
+    </li>
+    <li>
+      <%= negative_label_tag(@captcha, :email, 'Email:') %>
+      <%= negative_text_field_tag @captcha, :email %>
+    </li>
+    <li>
+      <%= negative_label_tag(@captcha, :body, 'Your Comment:') %>
+      <%= negative_text_area_tag @captcha, :body %>
+    </li>
+    <li>
+      <%= submit_tag %>
+    </li>
+  </ul>
+<% end -%>
+```
 
 ### Test and enjoy!
 
