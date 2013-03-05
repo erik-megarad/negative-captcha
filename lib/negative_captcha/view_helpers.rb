@@ -41,6 +41,27 @@ module ActionView
         end.html_safe
       end
 
+      def negative_file_field_tag(negative_captcha, field, options={})
+        file_field_tag(
+          negative_captcha.fields[field],
+          options.merge(:value => negative_captcha.values[field])
+        ) +
+        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          file_field_tag(field, :tabindex => '999')
+        end
+      end
+
+      def negative_check_box_tag(negative_captcha, field, options={})
+        check_box_tag(
+          negative_captcha.fields[field],
+          negative_captcha.values[field],
+          options
+        ) +
+        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          check_box_tag(field, '', :tabindex => '999')
+        end
+      end
+
       def negative_password_field_tag(negative_captcha, field, options={})
         password_field_tag(
           negative_captcha.fields[field],
