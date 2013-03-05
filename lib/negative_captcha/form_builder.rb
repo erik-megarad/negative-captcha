@@ -33,6 +33,18 @@ module ActionView
         @template.negative_hidden_field_tag(captcha, method, options).html_safe
       end
 
+      def negative_file_field(captcha, method, options = {})
+        html = @template.negative_file_field_tag(captcha, method, options).html_safe
+        html = "<div class='fieldWithErrors'>#{html}</div>" if @object.errors[method].present?
+        html.html_safe
+      end
+
+      def negative_check_box_field(captcha, method, options = {})
+        html = @template.negative_check_box_tag(captcha, method, options).html_safe
+        html = "<div class='fieldWithErrors'>#{html}</div>" if @object.errors[method].present?
+        html.html_safe
+      end
+
       def negative_password_field(captcha, method, options = {})
         html = @template.negative_password_field_tag(
           captcha,
