@@ -34,14 +34,30 @@ module ActionView
       end
 
       def negative_file_field(captcha, method, options = {})
-        html = @template.negative_file_field_tag(captcha, method, options).html_safe
-        html = "<div class='fieldWithErrors'>#{html}</div>" if @object.errors[method].present?
+        html = @template.negative_file_field_tag(
+          captcha,
+          method,
+          options
+        ).html_safe
+
+        if @object.errors[method].present?
+          html = "<div class='fieldWithErrors'>#{html}</div>"
+        end
+
         html.html_safe
       end
 
       def negative_check_box_field(captcha, method, options = {})
-        html = @template.negative_check_box_tag(captcha, method, options).html_safe
-        html = "<div class='fieldWithErrors'>#{html}</div>" if @object.errors[method].present?
+        html = @template.negative_check_box_tag(
+          captcha,
+          method,
+          options
+        ).html_safe
+
+        if @object.errors[method].present?
+          html = "<div class='fieldWithErrors'>#{html}</div>"
+        end
+
         html.html_safe
       end
 
@@ -53,7 +69,7 @@ module ActionView
         ).html_safe
 
         if @object.errors[method].present?
-          html = "<div class='fieldWithErrors'>#{html}</div>" 
+          html = "<div class='fieldWithErrors'>#{html}</div>"
         end
 
         html.html_safe
@@ -68,7 +84,7 @@ module ActionView
         ).html_safe
 
         if @object.errors[method].present?
-          html = "<div class='fieldWithErrors'>#{html}</div>" 
+          html = "<div class='fieldWithErrors'>#{html}</div>"
         end
 
         html.html_safe
