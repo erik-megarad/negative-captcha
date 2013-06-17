@@ -32,6 +32,9 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     assert filled_form.valid?
     assert_equal 'name', filled_form.values[:name]
     assert_equal 'comment', filled_form.values[:comment]
+
+    assert_equal 'name', filled_form.values['name']
+    assert_equal 'comment', filled_form.values['comment']
   end
 
   def test_missing_fields_are_not_in_values
@@ -48,7 +51,7 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     assert_equal "", filled_form.error
     assert filled_form.valid?
 
-    assert_equal({:name => 'name', :comment => 'comment'}, filled_form.values)
+    assert_equal({'name' => 'name', 'comment' => 'comment'}, filled_form.values)
   end
 
   def test_missing_timestamp
