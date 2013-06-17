@@ -1,5 +1,6 @@
 require 'digest/md5'
 require 'action_view'
+require 'active_support/hash_with_indifferent_access'
 
 class NegativeCaptcha
   attr_accessor :fields,
@@ -42,7 +43,7 @@ This usually happens because an automated script attempted to submit this form.
       hash
     end
 
-    self.values = {}
+    self.values = HashWithIndifferentAccess.new
     self.error = "No params provided"
 
     if opts[:params] && (opts[:params][:spinner] || opts[:params][:timestamp])
