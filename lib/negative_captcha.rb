@@ -75,7 +75,7 @@ Error: Hidden form fields were submitted that should not have been. #{message}
       self.error = ""
 
       fields.each do |name, encrypted_name|
-        self.values[name] = params[encrypted_name]
+        self.values[name] = params[encrypted_name] if params.include? encrypted_name
       end
     end
   end

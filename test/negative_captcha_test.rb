@@ -34,6 +34,23 @@ class NegativeCaptchaTest < Test::Unit::TestCase
     assert_equal 'comment', filled_form.values[:comment]
   end
 
+  def test_missing_fields_are_not_in_values
+    fields = [:name, :comment, :widget]
+    captcha = NegativeCaptcha.new(:fields => fields)
+    assert captcha.fields.is_a?(Hash)
+    assert_equal captcha.fields.keys.sort{|a,b|a.to_s<=>b.to_s}, fields.sort{|a,b|a.to_s<=>b.to_s}
+
+    filled_form = NegativeCaptcha.new(
+      :fields => fields,
+      :timestamp => captcha.timestamp,
+      :params => {:timestamp => captcha.timestamp, :spinner => captcha.spinner}.merge(encrypted_params(captcha, [:name, :comment]))
+    )
+    assert_equal "", filled_form.error
+    assert filled_form.valid?
+
+    assert_equal({:name => 'name', :comment => 'comment'}, filled_form.values)
+  end
+
   def test_missing_timestamp
     fields = [:name, :comment]
     captcha = NegativeCaptcha.new(:fields => fields)
