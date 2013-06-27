@@ -56,7 +56,7 @@ This usually happens because an automated script attempted to submit this form.
   end
 
   def valid?
-    error.nil? || error == "" || error.empty?
+    error.blank?
   end
 
   def process(params)
