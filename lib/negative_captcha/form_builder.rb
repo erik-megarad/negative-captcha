@@ -15,6 +15,20 @@ module ActionView
         html.html_safe
       end
 
+      def negative_email_field(captcha, method, options = {})
+        html = @template.negative_email_field_tag(
+          captcha,
+          method,
+          options
+        ).html_safe
+
+        if @object.errors[method].present?
+          html = "<div class='fieldWithErrors'>#{html}</div>"
+        end
+
+        html.html_safe
+      end
+
       def negative_text_area(captcha, method, options = {})
         html = @template.negative_text_area_tag(
           captcha,
