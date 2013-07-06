@@ -1,9 +1,6 @@
-require "action_view"
-require 'test/unit'
-require_relative '../lib/negative_captcha'
+require 'test_helper'
 
-class NegativeCaptchaTest < Test::Unit::TestCase
-
+class NegativeCaptchaTest < MiniTest::Unit::TestCase 
   def test_view_helpers
     assert ActionView::Base.instance_methods.include?(:negative_captcha)
   end

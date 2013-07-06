@@ -1,10 +1,6 @@
-require 'rubygems'
-require 'active_support'
-require 'action_view'
-require 'test/unit'
-require File.expand_path(File.join(File.dirname(__FILE__), '../lib/negative-captcha'))
+require 'test_helper'
 
-class TestableNegativeCaptchaTest < Test::Unit::TestCase
+class TestableNegativeCaptchaTest < MiniTest::Unit::TestCase 
   def test_can_be_predictable_for_tests
     NegativeCaptcha.test_mode = true
     fields = [:name, :comment]

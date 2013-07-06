@@ -8,48 +8,32 @@ module ActionView
         ].join.html_safe
       end
 
-      def negative_text_field_tag(negative_captcha, field, options={})
-        text_field_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-          content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          text_field_tag(field, '', :tabindex => '999', :autocomplete => 'off')
-        end.html_safe
+      def negative_text_field_tag(*args)
+        negative_input_tag :text_field_tag, *args
       end
 
-      def negative_email_field_tag(negative_captcha, field, options={})
-        email_field_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-          content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          email_field_tag(field, '', :tabindex => '999', :autocomplete => 'off')
-        end.html_safe
+      def negative_email_field_tag(*args)
+        negative_input_tag :email_field_tag, *args
       end
 
-      def negative_text_area_tag(negative_captcha, field, options={})
-        text_area_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-          content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          text_area_tag(field, '', :tabindex => '999', :autocomplete => 'off')
-        end.html_safe
+      def negative_text_area_tag(*args)
+        negative_input_tag :text_area_tag, *args
       end
 
-      def negative_hidden_field_tag(negative_captcha, field, options={})
-        hidden_field_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          hidden_field_tag(field, '', :tabindex => '999')
-        end.html_safe
+      def negative_hidden_field_tag(*args)
+        negative_input_tag :hidden_field_tag, *args
+      end
+
+      def negative_check_box_tag(*args)
+        negative_input_tag :check_box_tag, *args
+      end
+
+      def negative_password_field_tag(*args)
+        negative_input_tag :password_field_tag, *args
+      end
+
+      def negative_label_tag(negative_captcha, field, name, options={})
+        label_tag(negative_captcha.fields[field], name, options)
       end
 
       def negative_file_field_tag(negative_captcha, field, options={})
@@ -61,34 +45,21 @@ module ActionView
           file_field_tag(field, :tabindex => '999')
         end
       end
-
-      def negative_check_box_tag(negative_captcha, field, options={})
-        check_box_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          check_box_tag(field, '', :tabindex => '999')
-        end
-      end
-
-      def negative_password_field_tag(negative_captcha, field, options={})
-        password_field_tag(
-          negative_captcha.fields[field],
-          negative_captcha.values[field],
-          options
-        ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          password_field_tag(field, '', :tabindex => '999')
-        end.html_safe
-      end
-
-      def negative_label_tag(negative_captcha, field, name, options={})
-        label_tag(negative_captcha.fields[field], name, options)
-      end
     end
 
     #TODO: Select, check_box, etc
+
+    private
+
+    def negative_input_tag(method_name, negative_captcha, field, options={})
+      send(method_name,
+        negative_captcha.fields[field],
+        negative_captcha.values[field],
+        options
+      ) +
+      content_tag('div', :style => 'position: absolute; left: -2000px;') do
+        send(method_name, field, '', :tabindex => '999', :autocomplete => 'off')
+      end.html_safe
+    end
   end
 end

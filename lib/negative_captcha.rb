@@ -1,5 +1,6 @@
 require 'digest/md5'
 require 'action_view'
+require 'action_pack'
 
 class NegativeCaptcha
   attr_accessor :fields,
@@ -87,4 +88,8 @@ require "negative_captcha/form_builder"
 
 class ActionView::Base
   include NegativeCaptchaHelpers
+end
+
+class ActionView::Helpers::FormBuilder
+  include NegativeCaptchaFormBuilder
 end

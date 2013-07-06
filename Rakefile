@@ -7,6 +7,7 @@ task :default => :test
 
 desc 'Tests negative-captcha.'
 Rake::TestTask.new(:test) do |t|
+  t.libs << 'test'
   t.libs << 'lib'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true

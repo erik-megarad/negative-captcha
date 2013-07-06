@@ -132,6 +132,20 @@ Modify your form to include the honeypots and other fields. You can probably lea
 * It is still possible for someone to write a bot to exploit a single site by closely examining the DOM. This means that if you are Yahoo, Google or Facebook, negative captchas will not be a complete solution. But if you have a small application, negative captchas will likely be a very, very good solution for you. There are no easy work-arounds to this quite yet. Let me know if you have one.
 * I'm not a genius. It is possible that a bot can figure out the hashed values and determine which forms are which. I don't know how, but I think they might be able to. I welcome people who have thought this out more thoroughly to criticize this method and help me find solutions. I like this idea a lot and want it to succeed.
 
+## Running Unit Tests
+
+To run all tests:
+
+```
+rake
+```
+
+To run tests in one file:
+
+```
+ruby -Itest -Ilib test/negative_captcha_test.rb
+```
+
 ## Credit
 
 The idea of a negative captcha is not mine. It originates (I think) from Damien Katz of CouchDB. I (Erik Peterson) wrote the plugin. Calvin Yu wrote the original class which I refactored quite a bit and made into the gem.
