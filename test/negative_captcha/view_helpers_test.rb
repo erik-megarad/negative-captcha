@@ -1,16 +1,16 @@
 require 'test_helper'
 
-describe ActionView::Helpers::NegativeCaptchaHelpers do	
+describe ActionView::Helpers::NegativeCaptchaHelpers do
 	let(:view) { ActionView::Base.new }
 	let(:captcha) do
 		NegativeCaptcha.new(
 			secret: 'secret',
-      spinner: '0.0.0.1', 
-      fields: [:name],  
+      spinner: '0.0.0.1',
+      fields: [:name],
       params: {}
     )
 	end
-	
+
 	describe :negative_captcha do
 		it { view.negative_captcha(captcha).must_match 'name="timestamp"' }
 		it { view.negative_captcha(captcha).must_match 'name="spinner"' }

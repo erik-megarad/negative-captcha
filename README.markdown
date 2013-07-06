@@ -65,8 +65,8 @@ private
   def setup_negative_captcha
     @captcha = NegativeCaptcha.new(
       :secret => NEGATIVE_CAPTCHA_SECRET, #A secret key entered in environment.rb. 'rake secret' will give you a good one.
-      :spinner => request.remote_ip, 
-      :fields => [:name, :email, :body], #Whatever fields are in your form 
+      :spinner => request.remote_ip,
+      :fields => [:name, :email, :body], #Whatever fields are in your form
       :params => params
     )
   end
@@ -80,7 +80,7 @@ def create
   if @captcha.valid? && @comment.save
     redirect_to @comment
   else
-    flash[:notice] = @captcha.error if @captcha.error 
+    flash[:notice] = @captcha.error if @captcha.error
     render :action => 'new'
   end
 end
