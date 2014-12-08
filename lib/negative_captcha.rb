@@ -7,6 +7,7 @@ class NegativeCaptcha
     :values,
     :secret,
     :spinner,
+    :css,
     :message,
     :timestamp,
     :error
@@ -29,6 +30,8 @@ class NegativeCaptcha
     self.spinner = Digest::MD5.hexdigest(
       ([timestamp, secret] + Array(opts[:spinner])).join('-')
     )
+
+    self.css = opts[:css] || "position: absolute; left: -2000px;"
 
     self.message = opts[:message] || <<-MESSAGE
 Please try again.

@@ -14,7 +14,7 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-          content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          content_tag('div', :style => negative_captcha.css) do
           text_field_tag(field, '', :tabindex => '999', :autocomplete => 'off')
         end.html_safe
       end
@@ -25,7 +25,7 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-          content_tag('div', :style => 'position: absolute; left: -2000px;') do
+          content_tag('div', :style => negative_captcha.css) do
           text_area_tag(field, '', :tabindex => '999', :autocomplete => 'off')
         end.html_safe
       end
@@ -36,7 +36,7 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+        content_tag('div', :style => negative_captcha.css) do
           hidden_field_tag(field, '', :tabindex => '999')
         end.html_safe
       end
@@ -46,7 +46,7 @@ module ActionView
           negative_captcha.fields[field],
           options.merge(:value => negative_captcha.values[field])
         ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+        content_tag('div', :style => negative_captcha.css) do
           file_field_tag(field, :tabindex => '999')
         end
       end
@@ -57,7 +57,7 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+        content_tag('div', :style => negative_captcha.css) do
           check_box_tag(field, '', :tabindex => '999')
         end
       end
@@ -68,7 +68,7 @@ module ActionView
           negative_captcha.values[field],
           options
         ) +
-        content_tag('div', :style => 'position: absolute; left: -2000px;') do
+        content_tag('div', :style => negative_captcha.css) do
           password_field_tag(field, '', :tabindex => '999')
         end.html_safe
       end
