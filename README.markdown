@@ -63,9 +63,11 @@ private
     @captcha = NegativeCaptcha.new(
       # A secret key entered in environment.rb. 'rake secret' will give you a good one.
       secret: NEGATIVE_CAPTCHA_SECRET,
-      spinner: request.remote_ip, 
+      spinner: request.remote_ip,
       # Whatever fields are in your form
-      fields: [:name, :email, :body],  
+      fields: [:name, :email, :body],
+      # If you wish to override the default CSS styles (position: absolute; left: -2000px;) used to position the fields off-screen
+      css: "display: none",
       params: params
     )
   end
@@ -76,14 +78,14 @@ Modify your POST action(s) to check for the validity of the negative captcha for
 ```ruby
 def create
   # Decrypted params are stored in @captcha.values
-  @comment = Comment.new(@captcha.values) 
-  
+  @comment = Comment.new(@captcha.values)
+
   # @captcha.valid? will return false if a bot submitted the form
   if @captcha.valid? && @comment.save
     redirect_to @comment
   else
     # @captcha.error will explain what went wrong
-    flash[:notice] = @captcha.error if @captcha.error 
+    flash[:notice] = @captcha.error if @captcha.error
     render :action => 'new'
   end
 end
