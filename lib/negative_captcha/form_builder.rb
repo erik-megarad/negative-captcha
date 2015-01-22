@@ -75,12 +75,13 @@ module ActionView
         html.html_safe
       end
 
-      def negative_label(captcha, method, name, options = {})
+      def negative_label(captcha, method, name, options = {}, &block)
         html = @template.negative_label_tag(
           captcha,
           method,
           name,
-          options
+          options,
+          &block
         ).html_safe
 
         if @object.errors[method].present?

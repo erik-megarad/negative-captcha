@@ -121,7 +121,9 @@ Modify your form to include the honeypots and other fields. You can probably lea
       <%= negative_text_field_tag(@captcha, :email) %>
     </li>
     <li>
-      <%= negative_label_tag(@captcha, :body, 'Your Comment:') %>
+      <%= negative_label_tag(@captcha, :body, 'Your Comment:') do %>
+        <span>Accepts a block.</span>
+      <% end %>
       <%= negative_text_area_tag(@captcha, :body) %>
     </li>
     <li>

@@ -73,8 +73,8 @@ module ActionView
         end.html_safe
       end
 
-      def negative_label_tag(negative_captcha, field, name, options={})
-        label_tag(negative_captcha.fields[field], name, options)
+      def negative_label_tag(negative_captcha, field, name, options={}, &block)
+        label_tag(negative_captcha.fields[field], name, options, &block)
       end
     end
 
