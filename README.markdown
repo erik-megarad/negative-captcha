@@ -133,6 +133,10 @@ Modify your form to include the honeypots and other fields. You can probably lea
 <% end -%>
 ```
 
+### Caching / Use in Production
+
+Note that if you serve cached form markup generated with Negative Captcha and have the :spinner property in NegativeCaptcha.new set to a client-specific value, NegativeCaptcha will be unable to decode any form submission by a client other than the client used to warm the cache. Be sure to re-render all forms generated with Negative Captcha upon each request. 
+
 ### Test and enjoy!
 
 ## Possible Gotchas and other concerns
