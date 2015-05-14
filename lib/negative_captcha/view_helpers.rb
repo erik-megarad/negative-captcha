@@ -66,6 +66,7 @@ module ActionView
         check_box_tag(
           negative_captcha.fields[field],
           negative_captcha.values[field],
+          negative_captcha.values[field].present?,
           options
         ) +
         content_tag('div', :style => negative_captcha.css) do
