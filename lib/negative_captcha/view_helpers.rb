@@ -65,12 +65,12 @@ module ActionView
       def negative_check_box_tag(negative_captcha, field, options={})
         check_box_tag(
           negative_captcha.fields[field],
-          negative_captcha.values[field],
+          '1',
           negative_captcha.values[field].present?,
           options
         ) +
         content_tag('div', :style => negative_captcha.css) do
-          check_box_tag(field, '', :tabindex => '999')
+          check_box_tag(field, '1', :tabindex => '999')
         end
       end
 
