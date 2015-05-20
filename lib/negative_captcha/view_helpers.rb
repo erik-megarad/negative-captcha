@@ -70,7 +70,7 @@ module ActionView
           options
         ) +
         content_tag('div', :style => negative_captcha.css) do
-          check_box_tag(field, '1', :tabindex => '999')
+          check_box_tag(field, '1', false, :tabindex => '999')
         end
       end
 
