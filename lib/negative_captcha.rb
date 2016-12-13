@@ -49,7 +49,7 @@ This usually happens because an automated script attempted to submit this form.
     self.values = HashWithIndifferentAccess.new
     self.error = "No params provided"
 
-    if opts[:params] && (opts[:params][:spinner] || opts[:params][:timestamp])
+    if (opts[:params] && (opts[:params][:spinner] || opts[:params][:timestamp])) || @@test_mode
       process(opts[:params])
     end
   end
@@ -65,9 +65,9 @@ This usually happens because an automated script attempted to submit this form.
   def process(params)
     timestamp_age = (Time.now.to_i - params[:timestamp].to_i).abs
 
-    if params[:timestamp].nil? || timestamp_age > 86400
+    if (params[:timestamp].nil? || timestamp_age > 86400) && !@@test_mode
       self.error = "Error: Invalid timestamp.  #{message}"
-    elsif params[:spinner] != spinner
+    elsif (params[:spinner] != spinner) && !@@test_mode
       self.error = "Error: Invalid spinner.  #{message}"
     elsif fields.keys.detect {|name| params[name] && params[name] =~ /\S/}
       self.error = <<-ERROR
