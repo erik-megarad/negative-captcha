@@ -15,7 +15,7 @@ module ActionView
           options
         ) +
           content_tag('div', :style => negative_captcha.css) do
-          text_field_tag(field, '', :tabindex => '999', :autocomplete => 'off')
+          text_field_tag(field, '', :tabindex => '999', :autocomplete => SecureRandom.hex(10))
         end.html_safe
       end
 
@@ -26,7 +26,7 @@ module ActionView
           options
         ) +
           content_tag('div', :style => 'position: absolute; left: -2000px;') do
-          email_field_tag(field, '', :tabindex => '999', :autocomplete => 'off')
+          email_field_tag(field, '', :tabindex => '999', :autocomplete => SecureRandom.hex(10))
         end.html_safe
       end
 
@@ -37,7 +37,7 @@ module ActionView
           options
         ) +
           content_tag('div', :style => negative_captcha.css) do
-          text_area_tag(field, '', :tabindex => '999', :autocomplete => 'off')
+          text_area_tag(field, '', :tabindex => '999', :autocomplete => SecureRandom.hex(10))
         end.html_safe
       end
 
@@ -86,6 +86,17 @@ module ActionView
 
       def negative_label_tag(negative_captcha, field, name, options={}, &block)
         label_tag(negative_captcha.fields[field], name, options, &block)
+      end
+
+      def negative_number_field_tag(negative_captcha, field, options={})
+        number_field_tag(
+          negative_captcha.fields[field],
+          negative_captcha.values[field],
+          options
+        ) +
+        content_tag('div', :style => negative_captcha.css) do
+          number_field_tag(field, '', :tabindex => '999')
+        end.html_safe
       end
     end
 
