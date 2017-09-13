@@ -98,6 +98,17 @@ module ActionView
           number_field_tag(field, '', :tabindex => '999')
         end.html_safe
       end
+
+      def negative_email_field_tag(negative_captcha, field, options={})
+        email_field_tag(
+          negative_captcha.fields[field],
+          negative_captcha.values[field],
+          options
+        ) +
+        content_tag('div', :style => negative_captcha.css) do
+          number_field_tag(field, '', :tabindex => '999')
+        end.html_safe
+      end
     end
 
     #TODO: Select, check_box, etc
