@@ -1,3 +1,7 @@
+# This project is dead. So sorry.
+
+Due to the way that browsers now interact with autocomplete and accessibility features it's not feasible to use this same style of captcha. Keeping this for historical purposes.
+
 # Negative Captcha
 
 ## What is a Negative Captcha?
