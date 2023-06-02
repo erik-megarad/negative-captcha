@@ -1,6 +1,6 @@
-require 'digest/md5'
 require 'action_view'
 require 'active_support/hash_with_indifferent_access'
+require 'openssl'
 
 class NegativeCaptcha
   attr_accessor :fields,
@@ -17,9 +17,8 @@ class NegativeCaptcha
     class_variable_set(:@@test_mode, value)
   end
 
-  def initialize(opts)
-    self.secret = opts[:secret] ||
-      Digest::MD5.hexdigest("this_is_a_secret_key")
+  def initialize(secret, opts)
+    self.secret = secret
 
     if opts.has_key?(:params)
       self.timestamp = opts[:params][:timestamp] || Time.now.to_i
@@ -27,8 +26,10 @@ class NegativeCaptcha
       self.timestamp = Time.now.to_i
     end
 
-    self.spinner = Digest::MD5.hexdigest(
-      ([timestamp, secret] + Array(opts[:spinner])).join('-')
+    self.spinner = self.generate_session_secret(
+      self.secret,
+      self.timestamp,
+      opts[:spinner]
     )
 
     self.css = opts[:css] || "position: absolute; left: -2000px;"
@@ -38,12 +39,9 @@ Please try again.
 This usually happens because an automated script attempted to submit this form.
     MESSAGE
 
-    self.fields = opts[:fields].inject({}) do |hash, field_name|
-      hash[field_name] = @@test_mode ? "test-#{field_name}" : Digest::MD5.hexdigest(
-        [field_name, spinner, secret].join('-')
-      )
-
-      hash
+    self.fields = opts[:fields].each_with_object({}) do |hash, field_name|
+      hash[field_name]   = "test-#{field_name}" if @@test_mode
+      hash[field_name] ||= self.generate_authenticator(self.spinner, field_name)
     end
 
     self.values = HashWithIndifferentAccess.new
@@ -78,10 +76,40 @@ Error: Hidden form fields were submitted that should not have been. #{message}
     else
       self.error = ""
 
-      fields.each do |name, encrypted_name|
-        self.values[name] = params[encrypted_name] if params.include? encrypted_name
+      fields.each do |name, authenticator|
+        self.values[name] = params[authenticator] if params.include? authenticator
       end
     end
+  end
+  
+  protected
+  
+  def generate_session_secret(secret, nonce, context)
+    # securely compose the message by using fixed-size 64-bit length prefixes
+    # before each component
+    nonce          = nonce  .to_s
+    context        = context.to_s
+    nonce_length   = [ timestamp.length ].pack('Q>')
+    context_length = [ context  .length ].pack('Q>')
+    
+    message = (
+      nonce_length   + nonce
+      context_length + context
+    )
+
+    self.generate_authenticator(secret, message)
+  end
+  
+  def generate_authenticator(secret, message)
+    # decode the secret from hex into raw bytes
+    secret = [ secret ].pack('H*')
+    
+    # compute HMAC-SHA-256 of the message
+    OpenSSL::HMAC.hexdigest(
+      OpenSSL::Digest::SHA256.new,
+      key,
+      message
+    )
   end
 end
 
